@@ -24,13 +24,13 @@ func main() {
 	const softwareTicketLimit = 50
 
 	fmt.Printf("Welcome to the %s booking system! ", conferenceName)
-	fmt.Printf("As of version 0.0.1, we have a limit of %d tickets you can sell.\n", softwareTicketLimit)
+	fmt.Printf("As of version 0.0.2, we have a limit of %d tickets you can sell.\n", softwareTicketLimit)
 	fmt.Println("Please continue to get your tickets.")
 	fmt.Println(" ")
 	fmt.Printf("There are %d tickets remaining, with %d tickets originally.\n", conferenceTickets, remainingTickets)
 
 	// Infinite while loop
-	for {
+	for { // Possible to add a condition here (before the {)
 		fmt.Println(" ")
 		fmt.Println(" ")
 		fmt.Println(" ")
@@ -46,12 +46,28 @@ func main() {
 		fmt.Println("Please enter your last name:")
 		fmt.Scan(&lastName)
 
+		if len(firstName) < 2 || len(lastName) < 2 {
+			fmt.Println("Please enter at least 2 characters for your first and last name.")
+			continue
+		}
+
 		fmt.Println("Please enter your email:")
 		fmt.Scan(&email)
+
+		if !strings.Contains(email, "@") {
+			fmt.Println("Please enter the correct email.")
+			continue
+		}
 
 		fmt.Println("Please enter your ticket amount:")
 		fmt.Scan(&userTickets)
 
+		if userTickets > remainingTickets || userTickets <= 0 {
+			fmt.Printf("We only have %d tickets remaining.\n", remainingTickets)
+			continue // Sends us to the next iteration of the loop (doesn't go to the code below!)
+		} else {
+			fmt.Println("Ticket amount accepted!")
+		}
 		remainingTickets -= userTickets
 
 		bookings = append(bookings, firstName+" "+lastName)
@@ -66,7 +82,14 @@ func main() {
 		for _, booking := range bookings {
 			firstNamesSlice = append(firstNamesSlice, strings.Fields(booking)[0])
 		}
-		fmt.Printf("%v", firstNamesSlice)
+		fmt.Printf("%v\n", firstNamesSlice)
 
+		// Check that tickets still exist
+		if remainingTickets == 0 {
+			fmt.Println("No more tickets can be sold. Thank you!")
+			break
+		}
+
+		// Stopped at 1:43:48
 	}
 }
